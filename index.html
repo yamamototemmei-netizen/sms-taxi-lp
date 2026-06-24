@@ -8,22 +8,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; background: #f5f7fa; color: #333; min-height: 100vh; }
     .header { background: linear-gradient(135deg, #1a56db 0%, #1e429f 100%); color: white; padding: 16px 20px; text-align: center; font-size: 14px; font-weight: bold; letter-spacing: 0.05em; }
-    #sending-overlay { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.85); z-index: 9999; align-items: center; justify-content: center; font-size: 18px; color: #555; }
-    #sending-overlay.active { display: flex; }
     .container { max-width: 600px; margin: 0 auto; padding: 20px 16px 60px; }
-    .greeting-card { background: white; border-radius: 16px; padding: 24px 20px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); text-align: center; }
-    .greeting-card .emoji { font-size: 32px; margin-bottom: 8px; }
-    .greeting-card h1 { font-size: 20px; font-weight: bold; color: #1a56db; margin-bottom: 12px; }
-    .greeting-card p { font-size: 14px; color: #555; line-height: 1.7; margin-bottom: 16px; }
-    .greeting-card .question { font-size: 15px; font-weight: bold; color: #333; margin-bottom: 16px; }
-    .yn-buttons { display: flex; flex-direction: column; gap: 10px; }
-    .btn-yes { background: linear-gradient(135deg, #1a56db, #1e429f); color: white; border: none; border-radius: 10px; padding: 14px 20px; font-size: 15px; font-weight: bold; cursor: pointer; transition: opacity 0.2s; }
-    .btn-yes:hover { opacity: 0.88; }
-    .btn-no { background: white; color: #555; border: 2px solid #ddd; border-radius: 10px; padding: 13px 20px; font-size: 14px; cursor: pointer; transition: border-color 0.2s; }
-    .btn-no:hover { border-color: #aaa; }
-    #thankyou-banner { display: none; background: #ecfdf5; border: 1px solid #6ee7b7; border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; color: #065f46; font-size: 14px; line-height: 1.6; }
-    #thankyou-banner.show { display: block; }
-    .jobs-section { margin-top: 4px; display: none; }
     .jobs-section h2 { font-size: 17px; font-weight: bold; color: #1a56db; margin-bottom: 6px; }
     .jobs-section .subtitle { font-size: 13px; color: #777; margin-bottom: 16px; }
     .job-card { background: white; border-radius: 14px; margin-bottom: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); overflow: hidden; }
@@ -44,39 +29,16 @@
     .detail-row { display: grid; grid-template-columns: 80px 1fr; gap: 4px 10px; font-size: 13px; margin-bottom: 14px; }
     .detail-label { color: #888; font-size: 12px; padding-top: 1px; }
     .detail-value { color: #333; font-weight: 500; line-height: 1.5; }
-    .section-title { font-size: 12px; font-weight: bold; color: #555; margin: 12px 0 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .section-title { font-size: 12px; font-weight: bold; color: #555; margin: 12px 0 6px; letter-spacing: 0.04em; }
     .points-list { list-style: none; padding: 0; }
     .points-list li { font-size: 13px; color: #444; padding: 4px 0 4px 18px; position: relative; line-height: 1.5; }
     .points-list li::before { content: '✓'; position: absolute; left: 0; color: #22c55e; font-weight: bold; }
   </style>
 </head>
 <body>
-
-<div id="sending-overlay">送信中...</div>
 <div class="header">XMile キャリアサポート</div>
-
 <div class="container">
-  <div class="greeting-card" id="greeting-card">
-    <div class="emoji">🚖</div>
-    <h1>月13日勤務で<br>年収500万円以上も可能！<br>福岡のタクシードライバー求人</h1>
-    <p>以前ご登録いただいた方へ、特別にご案内しています。<br><br>
-      ✅ <strong>未経験OK・普通免許で応募可能</strong><br>
-      ✅ <strong>月の出勤はたったの13日</strong><br>
-      ✅ <strong>年収500万円以上も実現できる</strong><br><br>
-      少しでも気になったら、ぜひ求人をご覧ください。</p>
-    <div class="question">タクシードライバーに興味がありますか？</div>
-    <div class="yn-buttons">
-      <button class="btn-yes" onclick="handleYes()">✋ はい、興味があります</button>
-      <button class="btn-no" onclick="handleNo()">今は検討していません</button>
-    </div>
-  </div>
-
-  <div id="thankyou-banner">
-    ご意向をお知らせいただきありがとうございます！<br>
-    担当者より改めてご連絡させていただきます。まずは求人をご覧ください。
-  </div>
-
-  <div class="jobs-section" id="jobs-section">
+  <div class="jobs-section">
     <h2>福岡タクシー求人のご紹介</h2>
     <p class="subtitle">福岡エリアの厳選タクシー求人をご覧ください。気になる求人があればお気軽にご相談ください。</p>
 
@@ -170,70 +132,10 @@
         </ul>
       </div>
     </div>
-</div>
-</div>
-<button class="btn-time-confirm" onclick="submitTime()">この時間帯に連絡を希望する</button>
-    <button class="btn-time-cancel" onclick="closeTimeModal()">キャンセル</button>
-  </div>
-</div>
-<h3>受け付けました！</h3>
-    <p>選択した時間帯に担当者よりご連絡いたします。</p>
-    <button class="btn-success-close" onclick="closeSuccessModal()">閉じる</button>
-  </div>
-</div>
 
+  </div>
+</div>
 <script>
-  const params = new URLSearchParams(window.location.search);
-  const token = params.get('token') || '';
-
-  // ★ 新しいGAS URL
-  const GAS_URL = 'https://script.google.com/a/macros/xmile.co.jp/s/AKfycbz4bUmzebiKAys-8U1hXU2y9qlPQWrTUGr3TXAEkBQRSUY2DidAXo3DgKP7izUC5EA60A/exec';
-
-  let selectedTime = '';
-  let answered = false;
-
-  // ページ読み込み時にクリックを記録
-  window.addEventListener('load', function() {
-    if (token) {
-      fetch(GAS_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token: token, action: 'クリック' })
-      });
-    }
-  });
-
-  function handleYes() {
-    if (answered) return;
-    answered = true;
-    sendAnswer('はい（興味あり）');
-    document.getElementById('greeting-card').style.display = 'none';
-    document.getElementById('thankyou-banner').classList.add('show');
-    document.getElementById('jobs-section').style.display = 'block';
-  }
-
-  function handleNo() {
-    if (answered) return;
-    answered = true;
-    sendAnswer('いいえ（検討していない）');
-    document.getElementById('greeting-card').style.display = 'none';
-    const banner = document.getElementById('thankyou-banner');
-    banner.innerHTML = 'ご回答ありがとうございます。またいつでもお気軽にご相談ください！';
-    banner.classList.add('show');
-  }
-
-  function sendAnswer(answer) {
-    const overlay = document.getElementById('sending-overlay');
-    overlay.classList.add('active');
-    fetch(GAS_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: token, action: answer })
-    }).finally(() => overlay.classList.remove('active'));
-  }
-
   function toggleAccordion(btn) {
     btn.classList.toggle('open');
     btn.nextElementSibling.classList.toggle('open');
