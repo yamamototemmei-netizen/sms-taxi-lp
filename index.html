@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>福岡タクシー求人のご紹介</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; background: #f5f7fa; color: #333; min-height: 100vh; }
+    .header { background: linear-gradient(135deg, #1a56db 0%, #1e429f 100%); color: white; padding: 16px 20px; text-align: center; font-size: 14px; font-weight: bold; letter-spacing: 0.05em; }
+    #sending-overlay { display: none; position: fixed; inset: 0; background: rgba(255,255,255,0.85); z-index: 9999; align-items: center; justify-content: center; font-size: 18px; color: #555; }
+    #sending-overlay.active { display: flex; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px 16px 60px; }
+    .greeting-card { background: white; border-radius: 16px; padding: 24px 20px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); text-align: center; }
+    .greeting-card .emoji { font-size: 32px; margin-bottom: 8px; }
+    .greeting-card h1 { font-size: 20px; font-weight: bold; color: #1a56db; margin-bottom: 12px; }
+    .greeting-card p { font-size: 14px; color: #555; line-height: 1.7; margin-bottom: 16px; }
+    .greeting-card .question { font-size: 15px; font-weight: bold; color: #333; margin-bottom: 16px; }
+    .yn-buttons { display: flex; flex-direction: column; gap: 10px; }
+    .btn-yes { background: linear-gradient(135deg, #1a56db, #1e429f); color: white; border: none; border-radius: 10px; padding: 14px 20px; font-size: 15px; font-weight: bold; cursor: pointer; transition: opacity 0.2s; }
+    .btn-yes:hover { opacity: 0.88; }
+    .btn-no { background: white; color: #555; border: 2px solid #ddd; border-radius: 10px; padding: 13px 20px; font-size: 14px; cursor: pointer; transition: border-color 0.2s; }
+    .btn-no:hover { border-color: #aaa; }
+    #thankyou-banner { display: none; background: #ecfdf5; border: 1px solid #6ee7b7; border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; color: #065f46; font-size: 14px; line-height: 1.6; }
+    #thankyou-banner.show { display: block; }
+    .jobs-section { margin-top: 4px; display: none; }
+    .jobs-section h2 { font-size: 17px; font-weight: bold; color: #1a56db; margin-bottom: 6px; }
+    .jobs-section .subtitle { font-size: 13px; color: #777; margin-bottom: 16px; }
+    .job-card { background: white; border-radius: 14px; margin-bottom: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); overflow: hidden; }
+    .job-card-header { display: flex; align-items: center; gap: 12px; padding: 16px 16px 12px; border-bottom: 1px solid #f0f0f0; }
+    .job-icon { font-size: 28px; flex-shrink: 0; }
+    .job-header-text { flex: 1; }
+    .company-name { font-size: 12px; color: #888; margin-bottom: 3px; }
+    .job-title { font-size: 15px; font-weight: bold; color: #222; line-height: 1.4; }
+    .job-tags { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 16px; }
+    .tag { background: #eff6ff; color: #1d4ed8; font-size: 11px; border-radius: 20px; padding: 3px 10px; font-weight: 600; }
+    .tag.green { background: #f0fdf4; color: #15803d; }
+    .tag.orange { background: #fff7ed; color: #c2410c; }
+    .accordion-toggle { width: 100%; background: none; border: none; border-top: 1px solid #f0f0f0; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; font-size: 13px; color: #1a56db; font-weight: bold; cursor: pointer; }
+    .accordion-arrow { transition: transform 0.25s; }
+    .accordion-toggle.open .accordion-arrow { transform: rotate(180deg); }
+    .accordion-body { display: none; padding: 0 16px 16px; border-top: 1px solid #f5f5f5; }
+    .accordion-body.open { display: block; }
+    .detail-row { display: grid; grid-template-columns: 80px 1fr; gap: 4px 10px; font-size: 13px; margin-bottom: 14px; }
+    .detail-label { color: #888; font-size: 12px; padding-top: 1px; }
+    .detail-value { color: #333; font-weight: 500; line-height: 1.5; }
+    .section-title { font-size: 12px; font-weight: bold; color: #555; margin: 12px 0 6px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .points-list { list-style: none; padding: 0; }
+    .points-list li { font-size: 13px; color: #444; padding: 4px 0 4px 18px; position: relative; line-height: 1.5; }
+    .points-list li::before { content: '✓'; position: absolute; left: 0; color: #22c55e; font-weight: bold; }
+    .btn-hear { display: block; width: 100%; margin-top: 14px; padding: 13px; background: linear-gradient(135deg, #1a56db, #1e429f); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; text-align: center; transition: opacity 0.2s; }
+    .btn-hear:hover { opacity: 0.88; }
+    .bottom-cta { background: white; border-radius: 16px; padding: 24px 20px; margin-top: 8px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
+    .bottom-cta h3 { font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #222; }
+    .bottom-cta p { font-size: 13px; color: #666; line-height: 1.6; margin-bottom: 16px; }
+    .btn-consult { display: block; width: 100%; padding: 14px; background: linear-gradient(135deg, #1a56db, #1e429f); color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; transition: opacity 0.2s; }
+    .btn-consult:hover { opacity: 0.88; }
+    #time-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 1000; align-items: flex-end; justify-content: center; }
+    #time-modal.open { display: flex; }
+    .modal-sheet { background: white; border-radius: 20px 20px 0 0; padding: 28px 20px 40px; width: 100%; max-width: 600px; max-height: 85vh; overflow-y: auto; }
+    .modal-sheet h3 { font-size: 17px; font-weight: bold; margin-bottom: 8px; text-align: center; }
+    .modal-sheet .modal-sub { font-size: 13px; color: #777; text-align: center; margin-bottom: 20px; }
+    .time-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+    .btn-time { padding: 12px 8px; background: #f3f4f6; border: 2px solid transparent; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; color: #333; transition: all 0.15s; }
+    .btn-time:hover { background: #eff6ff; border-color: #93c5fd; }
+    .btn-time.selected { background: #eff6ff; border-color: #1a56db; color: #1a56db; }
+    .btn-time-confirm { display: block; width: 100%; padding: 14px; background: linear-gradient(135deg, #1a56db, #1e429f); color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; margin-bottom: 10px; transition: opacity 0.2s; }
+    .btn-time-confirm:hover { opacity: 0.88; }
+    .btn-time-cancel { display: block; width: 100%; padding: 12px; background: none; border: none; color: #888; font-size: 14px; cursor: pointer; }
+    #success-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 1100; align-items: center; justify-content: center; }
+    #success-modal.open { display: flex; }
+    .success-sheet { background: white; border-radius: 18px; padding: 32px 24px; width: 90%; max-width: 400px; text-align: center; }
+    .success-sheet .check { font-size: 48px; margin-bottom: 12px; }
+    .success-sheet h3 { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
+    .success-sheet p { font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 20px; }
+    .btn-success-close { padding: 12px 32px; background: #1a56db; color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<div id="sending-overlay">送信中...</div>
+<div class="header">XMile キャリアサポート</div>
+
+<div class="container">
+  <div class="greeting-card" id="greeting-card">
+    <div class="emoji">🚖</div>
+    <h1>月13日勤務で<br>年収500万円以上も可能！<br>福岡のタクシードライバー求人</h1>
+    <p>以前ご登録いただいた方へ、特別にご案内しています。<br><br>
+      ✅ <strong>未経験OK・普通免許で応募可能</strong><br>
+      ✅ <strong>月の出勤はたったの13日</strong><br>
+      ✅ <strong>年収500万円以上も実現できる</strong><br><br>
+      少しでも気になったら、ぜひ求人をご覧ください。</p>
+    <div class="question">タクシードライバーに興味がありますか？</div>
+    <div class="yn-buttons">
+      <button class="btn-yes" onclick="handleYes()">✋ はい、興味があります</button>
+      <button class="btn-no" onclick="handleNo()">今は検討していません</button>
+    </div>
+  </div>
+
+  <div id="thankyou-banner">
+    ご意向をお知らせいただきありがとうございます！<br>
+    担当者より改めてご連絡させていただきます。まずは求人をご覧ください。
+  </div>
+
+  <div class="jobs-section" id="jobs-section">
+    <h2>福岡タクシー求人のご紹介</h2>
+    <p class="subtitle">福岡エリアの厳選タクシー求人をご覧ください。気になる求人があればお気軽にご相談ください。</p>
+
+    <div class="job-card">
+      <div class="job-card-header"><div class="job-icon">🚖</div><div class="job-header-text"><div class="company-name">丸徳タクシー株式会社</div><div class="job-title">タクシードライバー【正社員】福岡市西区</div></div></div>
+      <div class="job-tags"><span class="tag">正社員</span><span class="tag green">月収17〜45万円</span><span class="tag orange">未経験OK</span><span class="tag">月12乗務</span><span class="tag">普通免許OK</span></div>
+      <button class="accordion-toggle" onclick="toggleAccordion(this)"><span>詳細を見る</span><span class="accordion-arrow">▼</span></button>
+      <div class="accordion-body">
+        <div class="detail-row"><span class="detail-label">月収</span><span class="detail-value">17万〜45万円（保証：3ヶ月25万円）</span></div>
+        <div class="detail-row"><span class="detail-label">勤務地</span><span class="detail-value">福岡県福岡市西区石丸</span></div>
+        <div class="detail-row"><span class="detail-label">勤務体系</span><span class="detail-value">隔日勤務・月12乗務（月6〜7日休み）</span></div>
+        <div class="detail-row"><span class="detail-label">配車アプリ</span><span class="detail-value">GO・Uber 両方導入</span></div>
+        <ul class="points-list" style="margin-top:10px">
+          <li>💰 <strong>未経験者は3ヶ月間25万円の給与保証！</strong></li>
+          <li>🚗 <strong>普通免許だけで応募OK！</strong>2種免許は会社が支援</li>
+          <li>📅 <strong>月12乗務・月6〜7日休み</strong></li>
+          <li>📱 GO・Uber両方導入で集客力抜群</li>
+          <li>🚙 マイカー通勤可・駐車場完備</li>
+        </ul>
+        <button class="btn-hear" onclick="openTimeModal()">🙋 この求人について話を聞きたい</button>
+      </div>
+    </div>
+
+    <div class="job-card">
+      <div class="job-card-header"><div class="job-icon">🌸</div><div class="job-header-text"><div class="company-name">株式会社花園タクシー</div><div class="job-title">タクシードライバー【正社員】福岡市早良区</div></div></div>
+      <div class="job-tags"><span class="tag">正社員</span><span class="tag green">月収25〜40万円以上</span><span class="tag orange">未経験OK</span><span class="tag">創業60年</span><span class="tag">普通免許OK</span></div>
+      <button class="accordion-toggle" onclick="toggleAccordion(this)"><span>詳細を見る</span><span class="accordion-arrow">▼</span></button>
+      <div class="accordion-body">
+        <div class="detail-row"><span class="detail-label">月収</span><span class="detail-value">25〜40万円以上（入社半年未満で40万円超の実績あり）</span></div>
+        <div class="detail-row"><span class="detail-label">勤務地</span><span class="detail-value">福岡県福岡市早良区有田</span></div>
+        <div class="detail-row"><span class="detail-label">配車アプリ</span><span class="detail-value">GO・Uber・自社無線・三五会無線の4つ使用可</span></div>
+        <ul class="points-list" style="margin-top:10px">
+          <li>💰 <strong>入社半年未満で月収40万円超の実績あり！</strong></li>
+          <li>🚗 <strong>普通免許だけで応募OK！</strong>2種免許取得費用は会社負担</li>
+          <li>📱 4つの配車手段で集客力が抜群</li>
+          <li>🏥 大学病院・大型モール近くで安定した需要あり</li>
+          <li>🔰 丁寧な同乗研修あり</li>
+        </ul>
+        <button class="btn-hear" onclick="openTimeModal()">🙋 この求人について話を聞きたい</button>
+      </div>
+    </div>
+
+    <div class="job-card">
+      <div class="job-card-header"><div class="job-icon">🏙️</div><div class="job-header-text"><div class="company-name">天神タクシー株式会社</div><div class="job-title">タクシードライバー【正社員】福岡市中央区</div></div></div>
+      <div class="job-tags"><span class="tag">正社員</span><span class="tag green">月収30〜40万円以上</span><span class="tag orange">未経験OK</span><span class="tag">寮あり</span><span class="tag">6ヶ月給与保証</span></div>
+      <button class="accordion-toggle" onclick="toggleAccordion(this)"><span>詳細を見る</span><span class="accordion-arrow">▼</span></button>
+      <div class="accordion-body">
+        <div class="detail-row"><span class="detail-label">月収</span><span class="detail-value">隔日：30〜35万／夜日勤：40万以上（乗務開始後6ヶ月間20万保証）</span></div>
+        <div class="detail-row"><span class="detail-label">勤務地</span><span class="detail-value">福岡県福岡市中央区那の津</span></div>
+        <div class="detail-row"><span class="detail-label">寮</span><span class="detail-value">借上げ寮完備（敷金・礼金0・家賃3〜3.5万円程度）</span></div>
+        <ul class="points-list" style="margin-top:10px">
+          <li>🏠 <strong>借上げ寮完備（敷金・礼金0）！</strong></li>
+          <li>💰 <strong>乗務開始後6ヶ月間は月20万円保証！</strong></li>
+          <li>📱 Uber・GOのアプリ配車が週1,000回以上</li>
+          <li>🎓 トップドライバー直伝の「後藤塾」で稼ぐコツを習得</li>
+          <li>🚗 2種免許取得費用・教習費用ともに全額会社負担</li>
+        </ul>
+        <button class="btn-hear" onclick="openTimeModal()">🙋 この求人について話を聞きたい</button>
+      </div>
+    </div>
+
+    <div class="job-card">
+      <div class="job-card-header"><div class="job-icon">⭐</div><div class="job-header-text"><div class="company-name">日新交通株式会社</div><div class="job-title">タクシードライバー【正社員】福岡市南区</div></div></div>
+      <div class="job-tags"><span class="tag">正社員</span><span class="tag green">年収520〜600万円実績</span><span class="tag orange">未経験OK</span><span class="tag">月8〜9日休み</span><span class="tag">普通免許OK</span></div>
+      <button class="accordion-toggle" onclick="toggleAccordion(this)"><span>詳細を見る</span><span class="accordion-arrow">▼</span></button>
+      <div class="accordion-body">
+        <div class="detail-row"><span class="detail-label">平均月収</span><span class="detail-value">約30万円（隔日勤務：28万／夜勤：40万以上）</span></div>
+        <div class="detail-row"><span class="detail-label">年収実績</span><span class="detail-value">1年目：520万円、2年目：600万円（未経験入社の実績）</span></div>
+        <div class="detail-row"><span class="detail-label">勤務地</span><span class="detail-value">福岡県福岡市南区清水</span></div>
+        <ul class="points-list" style="margin-top:10px">
+          <li>💰 <strong>未経験入社1年目で年収520万円の実績！</strong></li>
+          <li>📅 <strong>月8〜9日休み・連続休暇も可能</strong></li>
+          <li>🚗 <strong>普通免許だけで応募OK！</strong>3ヶ月間月25万円の給与保証</li>
+          <li>📱 配車アプリで乗客の半数以上が予約</li>
+          <li>🏠 社宅あり・有給・産休育休など福利厚生充実</li>
+        </ul>
+        <button class="btn-hear" onclick="openTimeModal()">🙋 この求人について話を聞きたい</button>
+      </div>
+    </div>
+
+    <div class="job-card">
+      <div class="job-card-header"><div class="job-icon">🏆</div><div class="job-header-text"><div class="company-name">小笹交通株式会社</div><div class="job-title">タクシードライバー【正社員】福岡市中央区</div></div></div>
+      <div class="job-tags"><span class="tag">正社員</span><span class="tag green">年収600万円も可</span><span class="tag orange">未経験OK</span><span class="tag">寮費1年無料</span><span class="tag">普通免許OK</span></div>
+      <button class="accordion-toggle" onclick="toggleAccordion(this)"><span>詳細を見る</span><span class="accordion-arrow">▼</span></button>
+      <div class="accordion-body">
+        <div class="detail-row"><span class="detail-label">月収</span><span class="detail-value">25〜50万円以上</span></div>
+        <div class="detail-row"><span class="detail-label">年収</span><span class="detail-value">300〜600万円以上（1年目の平均年収：400万円以上）</span></div>
+        <div class="detail-row"><span class="detail-label">寮</span><span class="detail-value">個室寮あり（寮費＋光熱費1年間無料・冷暖房完備）</span></div>
+        <ul class="points-list" style="margin-top:10px">
+          <li>🏠 <strong>個室寮の寮費＋光熱費が1年間完全無料！</strong></li>
+          <li>💰 <strong>年収500〜600万円のドライバーが多数在籍！</strong></li>
+          <li>🚗 <strong>普通免許だけで応募OK！</strong>2種免許取得費用は全額会社負担</li>
+          <li>📅 日勤・夜勤・隔日勤務から選択可能</li>
+          <li>🏅 未経験入社90%・充実の研修制度</li>
+        </ul>
+        <button class="btn-hear" onclick="openTimeModal()">🙋 この求人について話を聞きたい</button>
+      </div>
+    </div>
+
+    <div class="bottom-cta">
+      <h3>気になる求人はありましたか？</h3>
+      <p>詳しい条件や面接日程など、お気軽にご相談ください。<br>担当者が丁寧にサポートします。</p>
+      <button class="btn-consult" onclick="openTimeModal()">担当者に相談する</button>
+    </div>
+  </div>
+</div>
+
+<div id="time-modal">
+  <div class="modal-sheet">
+    <h3>折り返し希望時間を選択</h3>
+    <p class="modal-sub">担当者より選択した時間帯にご連絡いたします</p>
+    <div class="time-grid">
+      <button class="btn-time" onclick="selectTime(this,'10:00〜10:30')">10:00〜10:30</button>
+      <button class="btn-time" onclick="selectTime(this,'10:30〜11:00')">10:30〜11:00</button>
+      <button class="btn-time" onclick="selectTime(this,'11:00〜11:30')">11:00〜11:30</button>
+      <button class="btn-time" onclick="selectTime(this,'11:30〜12:00')">11:30〜12:00</button>
+      <button class="btn-time" onclick="selectTime(this,'12:00〜12:30')">12:00〜12:30</button>
+      <button class="btn-time" onclick="selectTime(this,'12:30〜13:00')">12:30〜13:00</button>
+      <button class="btn-time" onclick="selectTime(this,'13:00〜13:30')">13:00〜13:30</button>
+      <button class="btn-time" onclick="selectTime(this,'13:30〜14:00')">13:30〜14:00</button>
+      <button class="btn-time" onclick="selectTime(this,'14:00〜14:30')">14:00〜14:30</button>
+      <button class="btn-time" onclick="selectTime(this,'14:30〜15:00')">14:30〜15:00</button>
+      <button class="btn-time" onclick="selectTime(this,'15:00〜15:30')">15:00〜15:30</button>
+      <button class="btn-time" onclick="selectTime(this,'15:30〜16:00')">15:30〜16:00</button>
+      <button class="btn-time" onclick="selectTime(this,'16:00〜16:30')">16:00〜16:30</button>
+      <button class="btn-time" onclick="selectTime(this,'16:30〜17:00')">16:30〜17:00</button>
+      <button class="btn-time" onclick="selectTime(this,'17:00〜17:30')">17:00〜17:30</button>
+      <button class="btn-time" onclick="selectTime(this,'17:30〜18:00')">17:30〜18:00</button>
+      <button class="btn-time" onclick="selectTime(this,'18:00〜18:30')">18:00〜18:30</button>
+      <button class="btn-time" onclick="selectTime(this,'18:30〜19:00')">18:30〜19:00</button>
+      <button class="btn-time" onclick="selectTime(this,'19:00〜19:30')">19:00〜19:30</button>
+      <button class="btn-time" onclick="selectTime(this,'19:30〜20:00')">19:30〜20:00</button>
+      <button class="btn-time" onclick="selectTime(this,'20:00〜20:30')">20:00〜20:30</button>
+    </div>
+    <button class="btn-time-confirm" onclick="submitTime()">この時間帯に連絡を希望する</button>
+    <button class="btn-time-cancel" onclick="closeTimeModal()">キャンセル</button>
+  </div>
+</div>
+
+<div id="success-modal">
+  <div class="success-sheet">
+    <div class="check">✅</div>
+    <h3>受け付けました！</h3>
+    <p>選択した時間帯に担当者よりご連絡いたします。</p>
+    <button class="btn-success-close" onclick="closeSuccessModal()">閉じる</button>
+  </div>
+</div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('token') || '';
+
+  // ★ 新しいGAS URL
+  const GAS_URL = 'https://script.google.com/a/macros/xmile.co.jp/s/AKfycbz4bUmzebiKAys-8U1hXU2y9qlPQWrTUGr3TXAEkBQRSUY2DidAXo3DgKP7izUC5EA60A/exec';
+
+  let selectedTime = '';
+  let answered = false;
+
+  // ページ読み込み時にクリックを記録
+  window.addEventListener('load', function() {
+    if (token) {
+      fetch(GAS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: token, action: 'クリック' })
+      });
+    }
+  });
+
+  function handleYes() {
+    if (answered) return;
+    answered = true;
+    sendAnswer('はい（興味あり）');
+    document.getElementById('greeting-card').style.display = 'none';
+    document.getElementById('thankyou-banner').classList.add('show');
+    document.getElementById('jobs-section').style.display = 'block';
+  }
+
+  function handleNo() {
+    if (answered) return;
+    answered = true;
+    sendAnswer('いいえ（検討していない）');
+    document.getElementById('greeting-card').style.display = 'none';
+    const banner = document.getElementById('thankyou-banner');
+    banner.innerHTML = 'ご回答ありがとうございます。またいつでもお気軽にご相談ください！';
+    banner.classList.add('show');
+  }
+
+  function sendAnswer(answer) {
+    const overlay = document.getElementById('sending-overlay');
+    overlay.classList.add('active');
+    fetch(GAS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: token, action: answer })
+    }).finally(() => overlay.classList.remove('active'));
+  }
+
+  function toggleAccordion(btn) {
+    btn.classList.toggle('open');
+    btn.nextElementSibling.classList.toggle('open');
+  }
+
+  function openTimeModal() { document.getElementById('time-modal').classList.add('open'); }
+  function closeTimeModal() {
+    document.getElementById('time-modal').classList.remove('open');
+    selectedTime = '';
+    document.querySelectorAll('.btn-time').forEach(b => b.classList.remove('selected'));
+  }
+  function selectTime(btn, time) {
+    document.querySelectorAll('.btn-time').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedTime = time;
+  }
+  function submitTime() {
+    if (!selectedTime) { alert('時間帯を選択してください'); return; }
+    closeTimeModal();
+    const overlay = document.getElementById('sending-overlay');
+    overlay.classList.add('active');
+    fetch(GAS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: token, action: '折り返し希望：' + selectedTime })
+    }).finally(() => {
+      overlay.classList.remove('active');
+      document.getElementById('success-modal').classList.add('open');
+    });
+  }
+  function closeSuccessModal() { document.getElementById('success-modal').classList.remove('open'); }
+</script>
+</body>
+</html>
