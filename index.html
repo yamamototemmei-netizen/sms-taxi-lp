@@ -9,6 +9,19 @@
     body { font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif; background: #f5f7fa; color: #333; min-height: 100vh; }
     .header { background: linear-gradient(135deg, #1a56db 0%, #1e429f 100%); color: white; padding: 16px 20px; text-align: center; font-size: 14px; font-weight: bold; letter-spacing: 0.05em; }
     .container { max-width: 600px; margin: 0 auto; padding: 20px 16px 60px; }
+    .greeting-card { background: white; border-radius: 16px; padding: 24px 20px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); text-align: center; }
+    .greeting-card .emoji { font-size: 32px; margin-bottom: 8px; }
+    .greeting-card h1 { font-size: 20px; font-weight: bold; color: #1a56db; margin-bottom: 12px; }
+    .greeting-card p { font-size: 14px; color: #555; line-height: 1.7; margin-bottom: 16px; }
+    .greeting-card .question { font-size: 15px; font-weight: bold; color: #333; margin-bottom: 16px; }
+    .yn-buttons { display: flex; flex-direction: column; gap: 10px; }
+    .btn-yes { background: linear-gradient(135deg, #1a56db, #1e429f); color: white; border: none; border-radius: 10px; padding: 14px 20px; font-size: 15px; font-weight: bold; cursor: pointer; transition: opacity 0.2s; }
+    .btn-yes:hover { opacity: 0.88; }
+    .btn-no { background: white; color: #555; border: 2px solid #ddd; border-radius: 10px; padding: 13px 20px; font-size: 14px; cursor: pointer; transition: border-color 0.2s; }
+    .btn-no:hover { border-color: #aaa; }
+    #thankyou-banner { display: none; background: #ecfdf5; border: 1px solid #6ee7b7; border-radius: 12px; padding: 16px 20px; margin-bottom: 20px; color: #065f46; font-size: 14px; line-height: 1.6; }
+    #thankyou-banner.show { display: block; }
+    .jobs-section { margin-top: 4px; display: none; }
     .jobs-section h2 { font-size: 17px; font-weight: bold; color: #1a56db; margin-bottom: 6px; }
     .jobs-section .subtitle { font-size: 13px; color: #777; margin-bottom: 16px; }
     .job-card { background: white; border-radius: 14px; margin-bottom: 16px; box-shadow: 0 2px 10px rgba(0,0,0,0.07); overflow: hidden; }
@@ -38,7 +51,28 @@
 <body>
 <div class="header">XMile キャリアサポート</div>
 <div class="container">
-  <div class="jobs-section">
+
+  <div class="greeting-card" id="greeting-card">
+    <div class="emoji">🚖</div>
+    <h1>月13日勤務で<br>年収500万円以上も可能！<br>福岡のタクシードライバー求人</h1>
+    <p>以前ご登録いただいた方へ、特別にご案内しています。<br><br>
+      ✅ <strong>未経験OK・普通免許で応募可能</strong><br>
+      ✅ <strong>月の出勤はたったの13日</strong><br>
+      ✅ <strong>年収500万円以上も実現できる</strong><br><br>
+      少しでも気になったら、ぜひ求人をご覧ください。</p>
+    <div class="question">タクシードライバーに興味がありますか？</div>
+    <div class="yn-buttons">
+      <button class="btn-yes" onclick="handleYes()">✋ はい、興味があります</button>
+      <button class="btn-no" onclick="handleNo()">今は検討していません</button>
+    </div>
+  </div>
+
+  <div id="thankyou-banner">
+    ご意向をお知らせいただきありがとうございます！<br>
+    担当者より改めてご連絡させていただきます。まずは求人をご覧ください。
+  </div>
+
+  <div class="jobs-section" id="jobs-section">
     <h2>福岡タクシー求人のご紹介</h2>
     <p class="subtitle">福岡エリアの厳選タクシー求人をご覧ください。気になる求人があればお気軽にご相談ください。</p>
 
@@ -136,6 +170,17 @@
   </div>
 </div>
 <script>
+  function handleYes() {
+    document.getElementById('greeting-card').style.display = 'none';
+    document.getElementById('thankyou-banner').classList.add('show');
+    document.getElementById('jobs-section').style.display = 'block';
+  }
+  function handleNo() {
+    document.getElementById('greeting-card').style.display = 'none';
+    const banner = document.getElementById('thankyou-banner');
+    banner.innerHTML = 'ご回答ありがとうございます。またいつでもお気軽にご相談ください！';
+    banner.classList.add('show');
+  }
   function toggleAccordion(btn) {
     btn.classList.toggle('open');
     btn.nextElementSibling.classList.toggle('open');
