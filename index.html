@@ -48,32 +48,6 @@
     .points-list { list-style: none; padding: 0; }
     .points-list li { font-size: 13px; color: #444; padding: 4px 0 4px 18px; position: relative; line-height: 1.5; }
     .points-list li::before { content: '✓'; position: absolute; left: 0; color: #22c55e; font-weight: bold; }
-    .btn-hear { display: block; width: 100%; margin-top: 14px; padding: 13px; background: linear-gradient(135deg, #1a56db, #1e429f); color: white; border: none; border-radius: 10px; font-size: 14px; font-weight: bold; cursor: pointer; text-align: center; transition: opacity 0.2s; }
-    .btn-hear:hover { opacity: 0.88; }
-    .bottom-cta { background: white; border-radius: 16px; padding: 24px 20px; margin-top: 8px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
-    .bottom-cta h3 { font-size: 16px; font-weight: bold; margin-bottom: 8px; color: #222; }
-    .bottom-cta p { font-size: 13px; color: #666; line-height: 1.6; margin-bottom: 16px; }
-    .btn-consult { display: block; width: 100%; padding: 14px; background: linear-gradient(135deg, #1a56db, #1e429f); color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; transition: opacity 0.2s; }
-    .btn-consult:hover { opacity: 0.88; }
-    #time-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 1000; align-items: flex-end; justify-content: center; }
-    #time-modal.open { display: flex; }
-    .modal-sheet { background: white; border-radius: 20px 20px 0 0; padding: 28px 20px 40px; width: 100%; max-width: 600px; max-height: 85vh; overflow-y: auto; }
-    .modal-sheet h3 { font-size: 17px; font-weight: bold; margin-bottom: 8px; text-align: center; }
-    .modal-sheet .modal-sub { font-size: 13px; color: #777; text-align: center; margin-bottom: 20px; }
-    .time-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
-    .btn-time { padding: 12px 8px; background: #f3f4f6; border: 2px solid transparent; border-radius: 10px; font-size: 14px; font-weight: 600; cursor: pointer; color: #333; transition: all 0.15s; }
-    .btn-time:hover { background: #eff6ff; border-color: #93c5fd; }
-    .btn-time.selected { background: #eff6ff; border-color: #1a56db; color: #1a56db; }
-    .btn-time-confirm { display: block; width: 100%; padding: 14px; background: linear-gradient(135deg, #1a56db, #1e429f); color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; margin-bottom: 10px; transition: opacity 0.2s; }
-    .btn-time-confirm:hover { opacity: 0.88; }
-    .btn-time-cancel { display: block; width: 100%; padding: 12px; background: none; border: none; color: #888; font-size: 14px; cursor: pointer; }
-    #success-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 1100; align-items: center; justify-content: center; }
-    #success-modal.open { display: flex; }
-    .success-sheet { background: white; border-radius: 18px; padding: 32px 24px; width: 90%; max-width: 400px; text-align: center; }
-    .success-sheet .check { font-size: 48px; margin-bottom: 12px; }
-    .success-sheet h3 { font-size: 18px; font-weight: bold; margin-bottom: 10px; }
-    .success-sheet p { font-size: 14px; color: #555; line-height: 1.6; margin-bottom: 20px; }
-    .btn-success-close { padding: 12px 32px; background: #1a56db; color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -122,7 +96,6 @@
           <li>📱 GO・Uber両方導入で集客力抜群</li>
           <li>🚙 マイカー通勤可・駐車場完備</li>
         </ul>
-        <button class="btn-hear" onclick="openTimeModal()">🙋 この求人について話を聞きたい</button>
       </div>
     </div>
 
@@ -141,7 +114,6 @@
           <li>🏥 大学病院・大型モール近くで安定した需要あり</li>
           <li>🔰 丁寧な同乗研修あり</li>
         </ul>
-        <button class="btn-hear" onclick="openTimeModal()">🙋 この求人について話を聞きたい</button>
       </div>
     </div>
 
@@ -160,7 +132,6 @@
           <li>🎓 トップドライバー直伝の「後藤塾」で稼ぐコツを習得</li>
           <li>🚗 2種免許取得費用・教習費用ともに全額会社負担</li>
         </ul>
-        <button class="btn-hear" onclick="openTimeModal()">🙋 この求人について話を聞きたい</button>
       </div>
     </div>
 
@@ -179,7 +150,6 @@
           <li>📱 配車アプリで乗客の半数以上が予約</li>
           <li>🏠 社宅あり・有給・産休育休など福利厚生充実</li>
         </ul>
-        <button class="btn-hear" onclick="openTimeModal()">🙋 この求人について話を聞きたい</button>
       </div>
     </div>
 
@@ -198,54 +168,15 @@
           <li>📅 日勤・夜勤・隔日勤務から選択可能</li>
           <li>🏅 未経験入社90%・充実の研修制度</li>
         </ul>
-        <button class="btn-hear" onclick="openTimeModal()">🙋 この求人について話を聞きたい</button>
       </div>
     </div>
-
-    <div class="bottom-cta">
-      <h3>気になる求人はありましたか？</h3>
-      <p>詳しい条件や面接日程など、お気軽にご相談ください。<br>担当者が丁寧にサポートします。</p>
-      <button class="btn-consult" onclick="openTimeModal()">担当者に相談する</button>
-    </div>
-  </div>
 </div>
-
-<div id="time-modal">
-  <div class="modal-sheet">
-    <h3>折り返し希望時間を選択</h3>
-    <p class="modal-sub">担当者より選択した時間帯にご連絡いたします</p>
-    <div class="time-grid">
-      <button class="btn-time" onclick="selectTime(this,'10:00〜10:30')">10:00〜10:30</button>
-      <button class="btn-time" onclick="selectTime(this,'10:30〜11:00')">10:30〜11:00</button>
-      <button class="btn-time" onclick="selectTime(this,'11:00〜11:30')">11:00〜11:30</button>
-      <button class="btn-time" onclick="selectTime(this,'11:30〜12:00')">11:30〜12:00</button>
-      <button class="btn-time" onclick="selectTime(this,'12:00〜12:30')">12:00〜12:30</button>
-      <button class="btn-time" onclick="selectTime(this,'12:30〜13:00')">12:30〜13:00</button>
-      <button class="btn-time" onclick="selectTime(this,'13:00〜13:30')">13:00〜13:30</button>
-      <button class="btn-time" onclick="selectTime(this,'13:30〜14:00')">13:30〜14:00</button>
-      <button class="btn-time" onclick="selectTime(this,'14:00〜14:30')">14:00〜14:30</button>
-      <button class="btn-time" onclick="selectTime(this,'14:30〜15:00')">14:30〜15:00</button>
-      <button class="btn-time" onclick="selectTime(this,'15:00〜15:30')">15:00〜15:30</button>
-      <button class="btn-time" onclick="selectTime(this,'15:30〜16:00')">15:30〜16:00</button>
-      <button class="btn-time" onclick="selectTime(this,'16:00〜16:30')">16:00〜16:30</button>
-      <button class="btn-time" onclick="selectTime(this,'16:30〜17:00')">16:30〜17:00</button>
-      <button class="btn-time" onclick="selectTime(this,'17:00〜17:30')">17:00〜17:30</button>
-      <button class="btn-time" onclick="selectTime(this,'17:30〜18:00')">17:30〜18:00</button>
-      <button class="btn-time" onclick="selectTime(this,'18:00〜18:30')">18:00〜18:30</button>
-      <button class="btn-time" onclick="selectTime(this,'18:30〜19:00')">18:30〜19:00</button>
-      <button class="btn-time" onclick="selectTime(this,'19:00〜19:30')">19:00〜19:30</button>
-      <button class="btn-time" onclick="selectTime(this,'19:30〜20:00')">19:30〜20:00</button>
-      <button class="btn-time" onclick="selectTime(this,'20:00〜20:30')">20:00〜20:30</button>
-    </div>
-    <button class="btn-time-confirm" onclick="submitTime()">この時間帯に連絡を希望する</button>
+</div>
+<button class="btn-time-confirm" onclick="submitTime()">この時間帯に連絡を希望する</button>
     <button class="btn-time-cancel" onclick="closeTimeModal()">キャンセル</button>
   </div>
 </div>
-
-<div id="success-modal">
-  <div class="success-sheet">
-    <div class="check">✅</div>
-    <h3>受け付けました！</h3>
+<h3>受け付けました！</h3>
     <p>選択した時間帯に担当者よりご連絡いたします。</p>
     <button class="btn-success-close" onclick="closeSuccessModal()">閉じる</button>
   </div>
@@ -307,34 +238,6 @@
     btn.classList.toggle('open');
     btn.nextElementSibling.classList.toggle('open');
   }
-
-  function openTimeModal() { document.getElementById('time-modal').classList.add('open'); }
-  function closeTimeModal() {
-    document.getElementById('time-modal').classList.remove('open');
-    selectedTime = '';
-    document.querySelectorAll('.btn-time').forEach(b => b.classList.remove('selected'));
-  }
-  function selectTime(btn, time) {
-    document.querySelectorAll('.btn-time').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-    selectedTime = time;
-  }
-  function submitTime() {
-    if (!selectedTime) { alert('時間帯を選択してください'); return; }
-    closeTimeModal();
-    const overlay = document.getElementById('sending-overlay');
-    overlay.classList.add('active');
-    fetch(GAS_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: token, action: '折り返し希望：' + selectedTime })
-    }).finally(() => {
-      overlay.classList.remove('active');
-      document.getElementById('success-modal').classList.add('open');
-    });
-  }
-  function closeSuccessModal() { document.getElementById('success-modal').classList.remove('open'); }
 </script>
 </body>
 </html>
